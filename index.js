@@ -14,28 +14,42 @@ server.on('connection', (socket) => {
   userPool[user.id] = user;
 
   socket.on('data', (buffer) => {
-    dispatchAction(user.nickname, buffer);
+    dispatchAction(user.id, buffer);
   });
 });
 
-const dispatchAction = (userNickname, buffer) => {
+const dispatchAction = (userId, buffer) => {
   let message = parse(buffer);
-  events.emit(message.command, userNickname, message);
+  events.emit(message.command, userId, message);
 };
 
 /***********************************
 *  EVENT LISTENERS < CAN ABSTRACT  *
 ************************************/
 events.on('@all', (sender, message) => {
+  let senderName = userPool[sender].nickname;
   for (let userId in userPool) {
     let user = userPool[userId];
-    user.socket.write(`<${sender}>: ${message.payload}\n`);
+    user.socket.write(`<${senderName}>: ${message.payload}\n`);
+  }
+});
+
+events.on('@nickname', (sender, message) => {
+  let user = userPool[sender];
+  user.nickname = message.payload;
+  user.socket.write(`Name was succesfully changed to <${user.nickname}>!\n`);
+});
+
+events.on('@list', (sender, message) => {
+  let user = userPool[sender];
+  for (let userId in userPool) {
+    user.socket.write(`<${userPool[userId].nickname}>\n`);
   }
 });
 
 let parse = (buffer) => {
   let text = buffer.toString().trim();
-  if (!text.starsWith('@')) { return null; }
+  if (!text.startsWith('@')) { console.log('whoops'); }
 
   let [command, payload] = text.split(/\s+(.*)/);
   console.log(command);

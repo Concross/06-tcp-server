@@ -9,3 +9,5 @@ class User {
     this.socket = socket;
   }
 }
+
+module.exports = User;
