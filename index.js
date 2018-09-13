@@ -47,6 +47,19 @@ events.on('@list', (sender, message) => {
   }
 });
 
+events.on('@dm', (sender, message) => {
+  let senderName = userPool[sender].nickname;
+  let recipientName = message.payload.match(/[^\s]+/)[0];
+
+  for (let userId in userPool) {
+    if (userPool[userId].nickname === recipientName) {
+      let user = userPool[userId];
+      user.socket.write(`<${senderName}> ${message.payload.match(/[\s].*/gm)}\n`);
+    }
+  }
+
+});
+
 let parse = (buffer) => {
   let text = buffer.toString().trim();
   if (!text.startsWith('@')) { console.log('whoops'); }
