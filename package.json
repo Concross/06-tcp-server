@@ -1,0 +1,25 @@
+{
+  "name": "06-tcp-server",
+  "version": "1.0.0",
+  "description": "TCP Server chat room lab",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Concross/06-tcp-server.git"
+  },
+  "author": "Connor Crossley <cacrossley22@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Concross/06-tcp-server/issues"
+  },
+  "homepage": "https://github.com/Concross/06-tcp-server#readme",
+  "dependencies": {
+    "uuid": "^3.3.2"
+  }
+}
