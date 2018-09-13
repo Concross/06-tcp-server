@@ -16,11 +16,12 @@ server.on('connection', (socket) => {
   socket.on('data', (buffer) => {
     dispatchAction(user.id, buffer);
   });
+
 });
 
 const dispatchAction = (userId, buffer) => {
   let message = parse(buffer);
-  events.emit(message.command, userId, message);
+  message && events.emit(message.command, userId, message);
 };
 
 /***********************************
@@ -40,7 +41,7 @@ events.on('@nickname', (sender, message) => {
   user.socket.write(`Name was succesfully changed to <${user.nickname}>!\n`);
 });
 
-events.on('@list', (sender, message) => {
+events.on('@list', (sender) => {
   let user = userPool[sender];
   for (let userId in userPool) {
     user.socket.write(`<${userPool[userId].nickname}>\n`);
@@ -54,7 +55,7 @@ events.on('@dm', (sender, message) => {
   for (let userId in userPool) {
     if (userPool[userId].nickname === recipientName) {
       let user = userPool[userId];
-      user.socket.write(`<${senderName}> ${message.payload.match(/[\s].*/gm)}\n`);
+      user.socket.write(`   <<${senderName}>> ${message.payload.match(/[\s].*/gm)}\n`);
     }
   }
 });
