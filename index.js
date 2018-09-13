@@ -57,7 +57,14 @@ events.on('@dm', (sender, message) => {
       user.socket.write(`<${senderName}> ${message.payload.match(/[\s].*/gm)}\n`);
     }
   }
+});
 
+events.on('@quit', (sender) => {
+  let user = userPool[sender];
+  user.socket.write(`Goodbye, ${user.nickname}!`);
+  user.socket.destroy();
+  delete userPool[sender];
+  events.emit('close');
 });
 
 let parse = (buffer) => {
