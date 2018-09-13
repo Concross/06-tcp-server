@@ -62,9 +62,10 @@ events.on('@dm', (sender, message) => {
 events.on('@quit', (sender) => {
   let user = userPool[sender];
   user.socket.write(`Goodbye, ${user.nickname}!`);
+  user.socket.write(`-c`);
   user.socket.destroy();
   delete userPool[sender];
-  events.emit('close');
+  user.socket.emit('close');
 });
 
 let parse = (buffer) => {
